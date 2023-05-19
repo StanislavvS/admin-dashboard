@@ -1,8 +1,10 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Nav = () => {
   const incativelink = "flex gap-1 p-1";
   const activeLink = incativelink + " bg-white text-blue-900 rounded-l-lg";
+  const { pathname } = useRouter();
 
   return (
     <aside className="text-white p-4 pr-0">
@@ -26,7 +28,10 @@ const Nav = () => {
       </Link>
 
       <nav className="flex flex-col gap-2">
-        <Link href={"/"} className={activeLink}>
+        <Link
+          href={"/"}
+          className={pathname === "/" ? activeLink : incativelink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -43,7 +48,10 @@ const Nav = () => {
           </svg>
           Dashboard
         </Link>
-        <Link href={"/products"} className={incativelink}>
+        <Link
+          href={"/products"}
+          className={pathname.includes("/products") ? activeLink : incativelink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -60,7 +68,10 @@ const Nav = () => {
           </svg>
           Products
         </Link>
-        <Link href={"/orders"} className={incativelink}>
+        <Link
+          href={"/orders"}
+          className={pathname.includes("/orders") ? activeLink : incativelink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,7 +88,10 @@ const Nav = () => {
           </svg>
           Orders
         </Link>
-        <Link href={"/settings"} className={incativelink}>
+        <Link
+          href={"/settings"}
+          className={pathname.includes("/settings") ? activeLink : incativelink}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
