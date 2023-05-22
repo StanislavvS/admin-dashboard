@@ -10,5 +10,7 @@ export default async function hanlder(req, res) {
     const productDoc = await Product.create({ title, description, price });
 
     res.json(productDoc);
+  } else if (method === "GET") {
+    res.json(await Product.find());
   }
 }
