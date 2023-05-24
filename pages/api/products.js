@@ -11,6 +11,14 @@ export default async function hanlder(req, res) {
 
     res.json(productDoc);
   } else if (method === "GET") {
+    if (req.query?.id) {
+      res.json(await Product.findOne({ _id: req.query.id }));
+    }
     res.json(await Product.find());
+  } else if (method === "PUT") {
+    const { title, description, price, _id } = req.body;
+
+    await Product.updateOne({ _id }, { title, description, price });
+    res.json(true);
   }
 }
