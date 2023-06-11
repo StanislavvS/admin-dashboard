@@ -6,8 +6,13 @@ export default async function hanlder(req, res) {
 
   if (method === "POST") {
     await mongooseConnect();
-    const { title, description, price } = req.body;
-    const productDoc = await Product.create({ title, description, price });
+    const { title, description, price, images } = req.body;
+    const productDoc = await Product.create({
+      title,
+      description,
+      price,
+      images,
+    });
 
     res.json(productDoc);
   } else if (method === "GET") {
@@ -18,9 +23,9 @@ export default async function hanlder(req, res) {
     }
     res.json(await Product.find());
   } else if (method === "PUT") {
-    const { title, description, price, _id } = req.body;
+    const { title, description, price, _id, images } = req.body;
 
-    await Product.updateOne({ _id }, { title, description, price });
+    await Product.updateOne({ _id }, { title, description, price, images });
     res.json(true);
   } else if (method === "DELETE") {
     if (req.query?.id) {
