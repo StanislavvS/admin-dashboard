@@ -3,9 +3,9 @@ import Product from "@/models/Product";
 
 export default async function hanlder(req, res) {
   const { method } = req;
+  await mongooseConnect();
 
   if (method === "POST") {
-    await mongooseConnect();
     const { title, description, price, images } = req.body;
     const productDoc = await Product.create({
       title,
