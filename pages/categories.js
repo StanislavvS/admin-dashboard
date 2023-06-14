@@ -3,6 +3,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 const Categories = () => {
+  const [editedCategory, setEditedCategory] = useState(null);
   const [name, setName] = useState("");
   const [categories, setCategories] = useState([]);
   const [parentCategory, setParentCategory] = useState("");
@@ -19,15 +20,30 @@ const Categories = () => {
 
   const saveCategory = async (e) => {
     e.preventDefault();
-    await axios.post(`/api/categories`, { name, parentCategory });
+    const data = { name, parentCategory };
+    if (editedCategory) {
+      await axios.put("/api/categories", { ...data, _id: editedCategory._id });
+      setEditedCategory(null);
+      setParentCategory("");
+    } else {
+      await axios.post(`/api/categories`, data);
+    }
+
     setName("");
+    setParentCategory("");
     fetchCategories();
+  };
+
+  const editCategory = (category) => {
+    setEditedCategory(category);
+    setName(category.name);
+    setParentCategory(category.parent?._id);
   };
 
   return (
     <Layout>
       <h1>Categories</h1>
-      <label>New Category name</label>
+      <label>{editedCategory ? "Edit category" : "Create new category"}</label>
 
       <form onSubmit={saveCategory} className="flex gap-1">
         <input
@@ -40,6 +56,7 @@ const Categories = () => {
         <select
           className="mb-0"
           onChange={(e) => setParentCategory(e.target.value)}
+          value={parentCategory}
         >
           {" "}
           <option value={0}> No parent category</option>
@@ -59,6 +76,7 @@ const Categories = () => {
           <tr>
             <td>Category name</td>
             <td>Parent category</td>
+            <td></td>
           </tr>
         </thead>
         <tbody>
@@ -67,6 +85,15 @@ const Categories = () => {
               <tr key={index}>
                 <td>{category.name}</td>
                 <td>{category?.parent?.name}</td>
+                <td>
+                  <button
+                    onClick={() => editCategory(category)}
+                    className="btn-primary mr-1"
+                  >
+                    Edit
+                  </button>
+                  <button className="btn-primary">Delete</button>
+                </td>
               </tr>
             ))}
         </tbody>
